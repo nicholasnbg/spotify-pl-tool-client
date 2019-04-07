@@ -1,24 +1,25 @@
 import React, {Component} from 'react';
 import axios from 'axios'
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+// import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import './App.css';
+import {SpotifyProvider} from "./contexts/SpotifyContext";
+import SignIn from "./components/SignIn";
 
 class App extends Component {
   render() {
     return (
-        <Router>
+        <SpotifyProvider>
           <div className="App">
-            <button onClick={() => this.spotifyAuth()}>Sign in</button>
+            {/*<button onClick={() => this.spotifyAuth()}>Sign in</button>*/}
+            <div className="header">
+              <SignIn></SignIn>
+            </div>
           </div>
-        </Router>
+        </SpotifyProvider>
     );
   }
 
-  spotifyAuth() {
-    axios.get('http://localhost:8888/login')
-        .then(res => window.location = res.data)
-        .catch(err => console.log(err))
-  }
+
 }
 
 export default App;
