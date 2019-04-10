@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {SpotifyContext} from '../contexts/SpotifyContext'
 
 const SignIn = (props) => {
@@ -7,12 +8,20 @@ const SignIn = (props) => {
         <SpotifyContext.Consumer>
           {
             (context) => (
-                <button className="sign-in__button" onClick={context.performAuth}>Sign In</button>
+                <SignInButton onClick={context.performAuth}>Sign In</SignInButton>
             )
           }
         </SpotifyContext.Consumer>
       </div>
   );
-}
+};
 
 export default SignIn;
+
+const SignInButton = styled.button`
+  padding: 10px 20px;
+  color: white;
+  background:blue;
+  font-size: 1em;
+  border-radius: 10px;
+`
