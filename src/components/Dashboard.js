@@ -1,7 +1,7 @@
-import React, {Component, useContext, useState, useEffect, useLayoutEffect} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import qs from 'query-string'
 import styled from 'styled-components';
-import {SpotifyContext, SpotifyProvider} from "../contexts/SpotifyContext";
+import {SpotifyContext} from "../contexts/SpotifyContext";
 import SignIn from "./SignIn";
 import UserInfo from "./UserInfo";
 import VideoDetails from "./VideoDetails";
