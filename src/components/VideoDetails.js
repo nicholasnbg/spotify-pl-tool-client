@@ -41,11 +41,17 @@ const VideoDetails = (props) => {
       </InputGroup>
   );
 
-  const VideoDescription = ({props}) => (
-      <div>
-        {videoState.video.snippet.description}
-      </div>
-  );
+  const VideoDescription = ({props}) => {
+    const descText = videoState.video.snippet.description
+    const lines = descText.split('\n');
+
+
+    return (
+        <VideoText>
+          {lines.map((line, i ) => <p key={i}>{line}</p>)}
+        </VideoText>
+    )
+  };
 
 
   return (
@@ -58,6 +64,9 @@ const VideoDetails = (props) => {
 
 export default VideoDetails;
 
+const VideoText = styled.div`
+  text-align: left;
+`
 
 const VideoContainer = styled.div`
   width: 100%;
