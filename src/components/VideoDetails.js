@@ -4,45 +4,33 @@ import styled from 'styled-components';
 
 
 const VideoDetails = (props) => {
-  // const [video, setVideo] = useState(null);
-  // const [videoIdInput, setVideoIdInput] = useState('88EFvUmsoJI');
-  const [videoState, setVideoState] = useState({
-    videoIdInput: '88EFvUmsoJI',
-    video: null
-  });
+  const [video, setVideo] = useState(null);
+  const [videoIdInput, setVideoIdInput] = useState('88EFvUmsoJI');
 
   const submitId = () => {
-    const id = videoState.videoIdInput;
+    const id = videoIdInput;
     console.log('fetching video info');
     axios.get(`/getVideoDetails/${id}`)
         .then((res) => {
           let videoDetails = res.data.videoDetails;
-          const newState = {
-            ...videoState,
-            video: videoDetails
-          };
-          setVideoState(newState);
+          setVideo(videoDetails);
         })
         .catch(err => console.log(err))
   };
 
   const onInputChange = event => {
-    const newState = {
-      ...videoState,
-      videoIdInput: event.target.value
-    };
-    setVideoState(newState);
+    setVideoIdInput(event.target.value);
   };
 
   const InputComponent = () => (
       <InputGroup>
-        <Input placeholder="Youtube video Id" type="text" value={videoState.videoIdInput} onChange={(e) => onInputChange(e)}/>
+        <Input placeholder="Youtube video Id" type="text" value={videoIdInput} onChange={(e) => onInputChange(e)}/>
         <button type="submit" onClick={submitId}>Go!</button>
       </InputGroup>
   );
 
   const VideoDescription = ({props}) => {
-    const descText = videoState.video.snippet.description
+    const descText = video.snippet.description;
     const lines = descText.split('\n');
 
 
@@ -57,7 +45,9 @@ const VideoDetails = (props) => {
   return (
       <VideoContainer>
         {InputComponent()}
-        {videoState.video && <VideoDescription desc={'test'} />}
+        <Columns>
+          {video && <VideoDescription desc={'test'} />}
+        </Columns>
       </VideoContainer>
   );
 };
@@ -66,10 +56,17 @@ export default VideoDetails;
 
 const VideoText = styled.div`
   text-align: left;
-`
+  width: 40%;
+  padding-left: 15px;
+`;
+
+const Columns = styled.div`
+  display: flex;
+  width: 100%;
+`;
 
 const VideoContainer = styled.div`
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
