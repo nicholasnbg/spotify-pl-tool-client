@@ -1,9 +1,9 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import {Input, InputGroup} from '../styled/common'
 import {PatternBuilderContext} from "../contexts/PatternBuilderContext";
 import PatternBuilderContainer from "./patternBuilder/PatternBuilderContainer";
-
 
 const VideoDetails = (props) => {
   const [video, setVideo] = useState(null);
@@ -11,28 +11,14 @@ const VideoDetails = (props) => {
   const patternContext = useContext(PatternBuilderContext);
 
   const submitId = () => {
-    const id = videoIdInput;
-    console.log('fetching video info');
-    axios.get(`/getVideoDetails/${id}`)
+    axios.get(`/getVideoDetails/${videoIdInput}`)
         .then((res) => {
-          let videoDetails = res.data.videoDetails;
-          const desc = videoDetails.snippet.description;
+          const {videoDetails, videoDetails: {snippet: {description}}} = res.data;
           setVideo(videoDetails);
-          patternContext.state.setInitialText(desc)
+          patternContext.state.setInitialText(description)
         })
         .catch(err => console.log(err))
   };
-
-  const onInputChange = event => {
-    setVideoIdInput(event.target.value);
-  };
-
-  const InputComponent = () => (
-      <InputGroup>
-        <Input placeholder="Youtube video Id" type="text" value={videoIdInput} onChange={(e) => onInputChange(e)}/>
-        <button type="submit" onClick={submitId}>Go!</button>
-      </InputGroup>
-  );
 
   const VideoDescription = ({props}) => {
     const descText = video.snippet.description;
@@ -46,10 +32,18 @@ const VideoDetails = (props) => {
     )
   };
 
-
   return (
       <VideoContainer>
-        {InputComponent()}
+        <InputGroup>
+          <Input
+              type="text"
+              width="300px"
+              placeholder="Youtube video Id"
+              value={videoIdInput}
+              onChange={(e) => setVideoIdInput(e.target.value)}
+          />
+          <button type="submit" onClick={submitId}>Go!</button>
+        </InputGroup>
         <Columns>
           {video && <VideoDescription desc={'test'} />}
           <PatternBuilderContainer/>
@@ -77,14 +71,4 @@ const VideoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-`;
-
-const Input = styled.input`
- width: 300px;
- padding: 10px;
- font-size: 1em;
 `;
