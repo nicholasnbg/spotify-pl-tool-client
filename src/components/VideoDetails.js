@@ -1,11 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import {PatternBuilderContext} from "../contexts/PatternBuilderContext";
+import PatternBuilderContainer from "./patternBuilder/PatternBuilderContainer";
 
 
 const VideoDetails = (props) => {
   const [video, setVideo] = useState(null);
   const [videoIdInput, setVideoIdInput] = useState('88EFvUmsoJI');
+  const patternContext = useContext(PatternBuilderContext);
 
   const submitId = () => {
     const id = videoIdInput;
@@ -13,7 +16,9 @@ const VideoDetails = (props) => {
     axios.get(`/getVideoDetails/${id}`)
         .then((res) => {
           let videoDetails = res.data.videoDetails;
+          const desc = videoDetails.snippet.description;
           setVideo(videoDetails);
+          patternContext.state.setInitialText(desc)
         })
         .catch(err => console.log(err))
   };
@@ -47,6 +52,7 @@ const VideoDetails = (props) => {
         {InputComponent()}
         <Columns>
           {video && <VideoDescription desc={'test'} />}
+          <PatternBuilderContainer/>
         </Columns>
       </VideoContainer>
   );
@@ -56,13 +62,14 @@ export default VideoDetails;
 
 const VideoText = styled.div`
   text-align: left;
-  width: 40%;
+  width: 33%;
   padding-left: 15px;
 `;
 
 const Columns = styled.div`
   display: flex;
   width: 100%;
+  justify-content: space-between;
 `;
 
 const VideoContainer = styled.div`
