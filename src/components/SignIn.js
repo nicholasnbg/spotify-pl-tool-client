@@ -1,17 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {SpotifyContext} from '../contexts/SpotifyContext'
 
 const SignIn = (props) => {
+  const spotifyContext = useContext(SpotifyContext)
   return (
       <div className="sign-in">
-        <SpotifyContext.Consumer>
-          {
-            (context) => (
-                <SignInButton onClick={context.performAuth}>Sign In</SignInButton>
-            )
-          }
-        </SpotifyContext.Consumer>
+        <SignInButton onClick={spotifyContext.performAuth}>Sign In</SignInButton>
       </div>
   );
 };
