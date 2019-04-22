@@ -7,27 +7,24 @@ import UserInfo from "./UserInfo";
 import VideoDetails from "./VideoDetails";
 
 const Dashboard = (props) => {
-  let spotifyContext = useContext(SpotifyContext);
-
-  const [loggedIn, setLoggedIn] = useState(false)
+  const spotifyContext = useContext(SpotifyContext);
+  const user = spotifyContext.userDetails;
 
   useEffect( ()=>{
-    let contextToken = spotifyContext.accessToken;
-    let paramsToken = qs.parse(props.location.search).access_token;
+    const contextToken = spotifyContext.accessToken;
+    const paramsToken = qs.parse(props.location.search).access_token;
     if(contextToken){
-      setLoggedIn(true)
+      console.log("already logged in")
     } else if(paramsToken){
-      setLoggedIn(true);
       spotifyContext.logUserIn(paramsToken);
     }
   },[]);
 
-  const user = spotifyContext.userDetails;
   return(
       <div className="App">
         <Header>
           <div className="header">
-            {loggedIn ? <UserInfo name={user && user.display_name} displayPicUrl={user && user.images[0].url} /> : <SignIn/>}
+            {spotifyContext.loggedIn ? <UserInfo name={user.display_name} displayPicUrl={user.images[0].url} /> : <SignIn/>}
           </div>
         </Header>
         <VideoDetails/>
@@ -42,4 +39,4 @@ const Header = styled.header`
   justify-content: flex-end;
   padding-right: 20px;
   height: 150px;
-`
+`;
