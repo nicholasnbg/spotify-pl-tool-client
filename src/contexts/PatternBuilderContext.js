@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 const PatternBuilderContext = React.createContext();
 
@@ -7,18 +7,19 @@ const PatternBuilderProvider = (props) => {
   const [currentResult, setCurrentResult] = useState("");
   const [step, setStep] = useState(0);
 
-  const setInitialText = (text) => {
-    setOriginalText(text);
-    setCurrentResult(text);
-    setStep(1)
-  };
+  useEffect(() => {
+    setCurrentResult(originalText);
+    if(originalText.length > 0){
+      setStep(1)
+    }
+  }, [originalText]);
 
   return (
       <PatternBuilderContext.Provider value={{
         originalText,
         currentResult,
         step,
-        setInitialText: (text) => setInitialText(text)
+        setOriginalText
       }}>
         {props.children}
       </PatternBuilderContext.Provider>

@@ -36,9 +36,9 @@ const SpotifyProvider = (props) => {
 
   return (
       <SpotifyContext.Provider value={{
-        loggedIn: loggedIn,
-        accessToken: accessToken,
-        userDetails: userDetails,
+        loggedIn,
+        accessToken,
+        userDetails,
         performAuth,
         logUserIn: (token) => logUserIn(token)
       }}>

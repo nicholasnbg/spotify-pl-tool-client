@@ -15,7 +15,7 @@ const VideoDetails = (props) => {
         .then((res) => {
           const {videoDetails, videoDetails: {snippet: {description}}} = res.data;
           setVideo(videoDetails);
-          patternContext.state.setInitialText(description)
+          patternContext.setOriginalText(description)
         })
         .catch(err => console.log(err))
   };
