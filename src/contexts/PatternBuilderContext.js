@@ -1,40 +1,28 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 
 const PatternBuilderContext = React.createContext();
 
-class PatternBuilderProvider extends Component {
-  state = {
-    initialText: '',
-    currentResult: '',
-    step: 0,
-    setInitialText: (text) => this.setInitialText(text)
+const PatternBuilderProvider = (props) => {
+  const [originalText, setOriginalText] = useState("");
+  const [currentResult, setCurrentResult] = useState("");
+  const [step, setStep] = useState(0);
+
+  const setInitialText = (text) => {
+    setOriginalText(text);
+    setCurrentResult(text);
+    setStep(1)
   };
 
-  render() {
-    return (
-        <PatternBuilderContext.Provider value={{
-          state: this.state,
-        }}>
-          {this.props.children}
-        </PatternBuilderContext.Provider>
-    )
-  }
-
-  setInitialText = (text) => {
-    this.setState({
-      ...this.state,
-      initialText: text,
-      currentResult: text
-    })
-    this.setStep(1)
-  };
-
-  setStep = (newStep) => {
-    this.setState({
-      ...this.state,
-      step: newStep
-    })
-  }
-}
+  return (
+      <PatternBuilderContext.Provider value={{
+        originalText,
+        currentResult,
+        step,
+        setInitialText: (text) => setInitialText(text)
+      }}>
+        {props.children}
+      </PatternBuilderContext.Provider>
+  );
+};
 
 export {PatternBuilderContext, PatternBuilderProvider}

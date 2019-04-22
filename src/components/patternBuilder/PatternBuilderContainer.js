@@ -1,29 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {PatternBuilderContext} from "../../contexts/PatternBuilderContext";
-import styled from 'styled-components'
+import {Column} from "../../styled/common";
 
 const PatternBuilderContainer = (props) => {
+  const patternContext = useContext(PatternBuilderContext);
 
   return (
-      <React.Fragment>
-        <PatternBuilderContext.Consumer>
-          {
-            (context) => (
-              <React.Fragment>
-                <Column>
-                  <p>current step: {context.step}</p>
-                </Column>
-                <Column></Column>
-              </React.Fragment>
-            )
-          }
-        </PatternBuilderContext.Consumer>
-      </React.Fragment>
+      <>
+        <Column>
+          <p>current step: {patternContext.step}</p>
+        </Column>
+        <Column></Column>
+      </>
   );
-}
+};
 
 export default PatternBuilderContainer;
-
-const Column = styled.div`
-  width: 33%;
-`
