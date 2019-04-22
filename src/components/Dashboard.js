@@ -7,22 +7,22 @@ import UserInfo from "./UserInfo";
 import VideoDetails from "./VideoDetails";
 
 const Dashboard = (props) => {
-  let context = useContext(SpotifyContext);
+  let spotifyContext = useContext(SpotifyContext);
 
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect( ()=>{
-    let contextToken = context.state.accessToken;
+    let contextToken = spotifyContext.accessToken;
     let paramsToken = qs.parse(props.location.search).access_token;
     if(contextToken){
       setLoggedIn(true)
     } else if(paramsToken){
       setLoggedIn(true);
-      context.setAccessToken(paramsToken);
+      spotifyContext.logUserIn(paramsToken);
     }
   },[]);
 
-  const user = context.state.user;
+  const user = spotifyContext.userDetails;
   return(
       <div className="App">
         <Header>

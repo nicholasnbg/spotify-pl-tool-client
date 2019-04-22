@@ -1,54 +1,50 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
 const SpotifyContext = React.createContext();
 
-class SpotifyProvider extends Component {
-  state = {
-    loggedIn: false,
-    accessToken: null,
-    user: null
+const SpotifyProvider = (props) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+
+  const performAuth = () => {
+    axios.get('http://localhost:8888/login')
+        .then(res => {
+          window.location = res.data
+        })
+        .catch(err => console.log(err))
   };
 
-  render() {
-    return (
-        <SpotifyContext.Provider value={{
-          state: this.state,
-          performAuth: this.spotifyAuth,
-          setUser: this.setUser,
-          setAccessToken: (token) => this.setAccessToken(token)
-        }}>
-          {this.props.children}
-        </SpotifyContext.Provider>
-    )
-  }
+  const logUserIn = (token) =>{
+    setAccessToken(token);
+  };
 
-  setUser() {
-    axios.get('https://api.spotify.com/v1/me', {
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      }
-    }).then(res => {
-      const {data: user} = res;
-      this.setState({user});
+  useEffect(() => {
+    if(accessToken){
+      axios.get('https://api.spotify.com/v1/me', {
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        }
+      }).then(res => {
+        const {data: user} = res;
+        setUserDetails(user);
+        setLoggedIn(true)
+      })
+    }
+  }, [accessToken]);
 
-    })
-  }
-
-  setAccessToken(token){
-    console.log("setting token");
-    this.setState({
-      accessToken: token,
-      loggedIn: true},
-        () =>  {this.setUser()
-    });
-  }
-
-  spotifyAuth() {
-    axios.get('http://localhost:8888/login')
-        .then(res => window.location = res.data)
-        .catch(err => console.log(err))
-  }
-}
+  return (
+      <SpotifyContext.Provider value={{
+        loggedIn: loggedIn,
+        accessToken: accessToken,
+        userDetails: userDetails,
+        performAuth,
+        logUserIn: (token) => logUserIn(token)
+      }}>
+        {props.children}
+      </SpotifyContext.Provider>
+  )
+};
 
 export {SpotifyContext, SpotifyProvider}
